@@ -2,23 +2,38 @@
 
 <title>Category</title>
 
-<h1>Category List</h1>
-<br/>
+<div class="container">
 
-<table class="table table-bordered table-striped text-center">
-	<thead>
-		<tr>
-			<th>Category Name</th>
-			<th>Display Order</th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach(var cat in Model.OrderBy(u=>u.DisplayOrder))
-		{
+	<div class="row pt-4 pb-3">
+		<div class="col-6">
+			<h2 class="text-light">
+				Category List
+			</h2>
+		</div>
+		<div class="col-6 text-end">
+			<a asp-controller="Category" asp-action="Create" class="btn btn-primary">
+				<i class="bi bi-plus-square"></i> Create New Category
+			</a>
+		</div>
+	</div>
+
+
+	<table class="table table-bordered table-striped text-center">
+		<thead>
 			<tr>
-				<td>@cat.Name</td>
-				<td>@cat.DisplayOrder</td>
+				<th>Category Name</th>
+				<th>Display Order</th>
 			</tr>
-		}
-	</tbody>
-</table>
+		</thead>
+		<tbody>
+			@foreach(var cat in Model.OrderBy(u=>u.DisplayOrder))
+			{
+				<tr>
+					<td>@cat.Name</td>
+					<td>@cat.DisplayOrder</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+
+</div>

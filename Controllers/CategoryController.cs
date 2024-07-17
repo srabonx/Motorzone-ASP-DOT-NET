@@ -16,5 +16,10 @@ namespace MultiWeb.Controllers
 			var objCategoryList = m_db.Categories.ToList();
 			return View(objCategoryList); 
 		}
+
+		public IActionResult Create()
+		{
+			return View();
+		}
 	}
 }

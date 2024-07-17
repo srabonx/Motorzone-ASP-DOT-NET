@@ -1,4 +1,24 @@
-﻿
+﻿@model List<Category>
+
 <title>Category</title>
 
 <h1>Category List</h1>
+<br/>
+
+<table class="table table-bordered table-striped text-center">
+	<thead>
+		<tr>
+			<th>Category Name</th>
+			<th>Display Order</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach(var cat in Model.OrderBy(u=>u.DisplayOrder))
+		{
+			<tr>
+				<td>@cat.Name</td>
+				<td>@cat.DisplayOrder</td>
+			</tr>
+		}
+	</tbody>
+</table>

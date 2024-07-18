@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MultiWeb.Data;
+using MultiWeb.Models;
 
 namespace MultiWeb.Controllers
 {
@@ -19,6 +20,19 @@ namespace MultiWeb.Controllers
 
 		public IActionResult Create()
 		{
+			return View();
+		}
+
+		[HttpPost]
+		public IActionResult Create(Category obj)
+		{
+			
+			if (ModelState.IsValid)
+			{
+				m_db.Categories.Add(obj);
+				m_db.SaveChanges();
+				return RedirectToAction("Index");
+			}
 			return View();
 		}
 	}

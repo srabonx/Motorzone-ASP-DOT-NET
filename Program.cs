@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MultiWeb.Data;
+using MultiWeb.Repository;
+using MultiWeb.Repository.IRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +11,8 @@ builder.Services.AddControllersWithViews();
 // Adding DB Context to the container
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
 
 
 var app = builder.Build();

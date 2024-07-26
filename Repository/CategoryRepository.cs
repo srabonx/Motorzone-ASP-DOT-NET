@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace MultiWeb.Repository
 {
-	public class CategoryRepository : Repository<Category>, ICategoryRepository
+    public class CategoryRepository : Repository<Category>, ICategoryRepository
 	{
 		private readonly ApplicationDbContext m_db;
 		private readonly DbSet<Category> m_dbSet;

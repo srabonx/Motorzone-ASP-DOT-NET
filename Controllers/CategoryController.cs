@@ -7,80 +7,80 @@ namespace MultiWeb.Controllers;
 
 public class CategoryController : Controller
 {
-	private readonly IUnitOfWork m_unitOfWork;
+    private readonly IUnitOfWork m_unitOfWork;
 
-	public CategoryController(IUnitOfWork unitOfWork)
-	{
-		m_unitOfWork = unitOfWork;
-	}
-	public IActionResult Index()
-	{
-		var objCategoryList = m_unitOfWork.CategoryRepository.GetAll().ToList();
-		return View(objCategoryList); 
-	}
+    public CategoryController(IUnitOfWork unitOfWork)
+    {
+        m_unitOfWork = unitOfWork;
+    }
+    public IActionResult Index()
+    {
+        var objCategoryList = m_unitOfWork.CategoryRepository.GetAll().ToList();
+        return View(objCategoryList);
+    }
 
-	public IActionResult Create()
-	{
-		return View();
-	}
+    public IActionResult Create()
+    {
+        return View();
+    }
 
-	[HttpPost]
-	public IActionResult Create(Category obj)
-	{
-		
-		if (ModelState.IsValid)
-		{
-			m_unitOfWork.CategoryRepository.Add(obj);
-			m_unitOfWork.Save();
-			TempData["success"] = "Category created successfully";
-			return RedirectToAction("Index");
-		}
-		return View();
-	}
+    [HttpPost]
+    public IActionResult Create(Category obj)
+    {
 
-	public IActionResult Edit(int? id)
-	{
-		if (id == null || id == 0) return NotFound();
+        if (ModelState.IsValid)
+        {
+            m_unitOfWork.CategoryRepository.Add(obj);
+            m_unitOfWork.Save();
+            TempData["success"] = "Category created successfully";
+            return RedirectToAction("Index");
+        }
+        return View();
+    }
 
-		Category? categoryFromDb = m_unitOfWork.CategoryRepository.Get(e => e.Id == id);
+    public IActionResult Edit(int? id)
+    {
+        if (id == null || id == 0) return NotFound();
 
-		if(categoryFromDb == null) return NotFound();
+        Category? categoryFromDb = m_unitOfWork.CategoryRepository.Get(e => e.Id == id);
 
-		return View(categoryFromDb);
-	}
+        if (categoryFromDb == null) return NotFound();
 
-	[HttpPost]
-	public IActionResult Edit(Category obj)
-	{
+        return View(categoryFromDb);
+    }
 
-		if (ModelState.IsValid)
-		{
-			m_unitOfWork.CategoryRepository.Update(obj);
-			m_unitOfWork.Save();
-			TempData["success"] = "Category updated successfully";
-			return RedirectToAction("Index");
-		}
-		return View();
-	}
+    [HttpPost]
+    public IActionResult Edit(Category obj)
+    {
 
-	public IActionResult Delete(int? id)
-	{
-		if (id == null || id == 0) return NotFound();
+        if (ModelState.IsValid)
+        {
+            m_unitOfWork.CategoryRepository.Update(obj);
+            m_unitOfWork.Save();
+            TempData["success"] = "Category updated successfully";
+            return RedirectToAction("Index");
+        }
+        return View();
+    }
 
-		Category? categoryFromDb = m_unitOfWork.CategoryRepository.Get(e => e.Id == id);
+    public IActionResult Delete(int? id)
+    {
+        if (id == null || id == 0) return NotFound();
 
-		if (categoryFromDb == null) return NotFound();
+        Category? categoryFromDb = m_unitOfWork.CategoryRepository.Get(e => e.Id == id);
 
-		return View(categoryFromDb);
-	}
+        if (categoryFromDb == null) return NotFound();
 
-	[HttpPost]
-	public IActionResult Delete(Category obj)
-	{
-		m_unitOfWork.CategoryRepository.Remove(obj);
-		m_unitOfWork.Save();
-		TempData["success"] = "Category deleted successfully";
-		return RedirectToAction("Index");
-	}
+        return View(categoryFromDb);
+    }
+
+    [HttpPost]
+    public IActionResult Delete(Category obj)
+    {
+        m_unitOfWork.CategoryRepository.Remove(obj);
+        m_unitOfWork.Save();
+        TempData["success"] = "Category deleted successfully";
+        return RedirectToAction("Index");
+    }
 
 }

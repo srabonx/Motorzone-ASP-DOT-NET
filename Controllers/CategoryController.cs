@@ -1,21 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MultiWeb.Data;
 using MultiWeb.Models;
-using MultiWeb.Repository.IRepository;
 
 namespace MultiWeb.Controllers;
 
 public class CategoryController : Controller
 {
-	private readonly IUnitOfWork m_unitOfWork;
+	private readonly ApplicationDbContext m_db;
 
-	public CategoryController(IUnitOfWork unitOfWork)
+	public CategoryController(ApplicationDbContext db)
 	{
-		m_unitOfWork = unitOfWork;
+		m_db = db;
 	}
 	public IActionResult Index()
 	{
-		var objCategoryList = m_unitOfWork.CategoryRepository.GetAll().ToList();
+		var objCategoryList = m_db.Categories.ToList();
 		return View(objCategoryList); 
 	}
 
@@ -30,8 +29,8 @@ public class CategoryController : Controller
 		
 		if (ModelState.IsValid)
 		{
-			m_unitOfWork.CategoryRepository.Add(obj);
-			m_unitOfWork.Save();
+			m_db.Categories.Add(obj);
+			m_db.SaveChanges();
 			TempData["success"] = "Category created successfully";
 			return RedirectToAction("Index");
 		}
@@ -42,7 +41,7 @@ public class CategoryController : Controller
 	{
 		if (id == null || id == 0) return NotFound();
 
-		Category? categoryFromDb = m_unitOfWork.CategoryRepository.Get(e => e.Id == id);
+		Category? categoryFromDb = m_db.Categories.Find(id);
 
 		if(categoryFromDb == null) return NotFound();
 
@@ -55,8 +54,8 @@ public class CategoryController : Controller
 
 		if (ModelState.IsValid)
 		{
-			m_unitOfWork.CategoryRepository.Update(obj);
-			m_unitOfWork.Save();
+			m_db.Categories.Update(obj);
+			m_db.SaveChanges();
 			TempData["success"] = "Category updated successfully";
 			return RedirectToAction("Index");
 		}
@@ -67,7 +66,7 @@ public class CategoryController : Controller
 	{
 		if (id == null || id == 0) return NotFound();
 
-		Category? categoryFromDb = m_unitOfWork.CategoryRepository.Get(e => e.Id == id);
+		Category? categoryFromDb = m_db.Categories.Find(id);
 
 		if (categoryFromDb == null) return NotFound();
 
@@ -77,8 +76,8 @@ public class CategoryController : Controller
 	[HttpPost]
 	public IActionResult Delete(Category obj)
 	{
-		m_unitOfWork.CategoryRepository.Remove(obj);
-		m_unitOfWork.Save();
+		m_db.Categories.Remove(obj);
+		m_db.SaveChanges();
 		TempData["success"] = "Category deleted successfully";
 		return RedirectToAction("Index");
 	}

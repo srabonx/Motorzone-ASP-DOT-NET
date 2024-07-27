@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MultiWeb.Data;
+using Multi.DataAccess.Data;
+using Multi.Models;
 using MultiWeb.Models;
 
 namespace MultiWeb.Areas.Admin.Controllers;

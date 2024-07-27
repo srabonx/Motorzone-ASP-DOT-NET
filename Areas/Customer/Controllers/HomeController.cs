@@ -2,8 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 using MultiWeb.Models;
 using System.Diagnostics;
 
-namespace MultiWeb.Controllers
+namespace MultiWeb.Areas.Customer.Controllers
 {
+    [Area("Customer")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

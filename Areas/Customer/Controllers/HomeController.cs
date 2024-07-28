@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using MultiWeb.Models;
 using System.Diagnostics;
+using Multi.Models;
 
 namespace MultiWeb.Areas.Customer.Controllers
 {

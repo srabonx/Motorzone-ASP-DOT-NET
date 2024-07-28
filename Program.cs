@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Multi.DataAccess.Data;
+using Multi.DataAccess.Repository;
+using Multi.DataAccess.Repository.IUnitOfWorks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +11,9 @@ builder.Services.AddControllersWithViews();
 // Adding DB Context to the container
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Adding Unit of Work to the container
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 
 var app = builder.Build();

@@ -45,7 +45,7 @@ public class CategoryController : Controller
     {
         if (id == null || id == 0) return NotFound();
 
-        Category? categoryFromDb = m_unitOfWork.CategoryRepo.Get(id);
+        Category? categoryFromDb = m_unitOfWork.CategoryRepo.Get((uint)id);
 
         if (categoryFromDb == null) return NotFound();
 
@@ -70,7 +70,7 @@ public class CategoryController : Controller
     {
         if (id == null || id == 0) return NotFound();
 
-        Category? categoryFromDb = m_unitOfWork.CategoryRepo.Get(id);
+        Category? categoryFromDb = m_unitOfWork.CategoryRepo.Get((uint)id);
 
         if (categoryFromDb == null) return NotFound();
 

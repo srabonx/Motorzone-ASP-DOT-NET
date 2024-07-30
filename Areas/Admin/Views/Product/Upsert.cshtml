@@ -1,0 +1,114 @@
+﻿@model ProductVM
+
+@{
+	ViewData["Title"] = "Add Product";
+}
+
+<div class="container">
+	<div class="card form-floating shadow">
+		<div class="card-header bg-dark text-light">
+			<div class="col-12 text-center">
+				<h1>@(Model.ProductBike.Id != 0?"Update":"Create") Product</h1>
+			</div>
+		</div>
+
+		<div class="card-body">
+			<form method="post" enctype="multipart/form-data">
+				<input asp-for="ProductBike.Id" hidden/>
+				<input asp-for="ProductBike.ImageUrl" hidden />
+				<div class="border p-3">
+					<div class="col-12 p-3">
+						<label asp-for="ProductBike.Manufacturer"></label>
+						<input asp-for="ProductBike.Manufacturer" class="form-control" />
+						<span asp-validation-for="ProductBike.Manufacturer" class="text-danger"></span>
+					</div>
+					<div class="col-12 p-3">
+						<label asp-for="ProductBike.Name"></label>
+						<input asp-for="ProductBike.Name" class="form-control" />
+						<span asp-validation-for="ProductBike.Name" class="text-danger"></span>
+					</div>
+					<div class="row p-3">
+						<div class="col-4">
+							<label asp-for="ProductBike.Version"></label>
+							<input asp-for="ProductBike.Version" class="form-control" />
+						</div>
+						<div class="col-4">
+							<label asp-for="ProductBike.Year"></label>
+							<input asp-for="ProductBike.Year" class="form-control" />
+						</div>
+						<div class="col-4">
+							<label asp-for="ProductBike.CategoryId"></label>
+							<select asp-for="ProductBike.CategoryId" asp-items="@Model.CategoryList" class="form-select">
+								<option disabled selected>---Select Category---</option>
+							</select>
+							<span asp-validation-for="ProductBike.CategoryId"></span>
+						</div>
+					</div>
+					<div class="col-12 p-3">
+						<label asp-for="ProductBike.Price"></label>
+						<input asp-for="ProductBike.Price" class="form-control" />
+					</div>
+					@if (Model.ProductBike.Id != 0)
+					{
+						<img src="@Model.ProductBike.ImageUrl" width="50%" height="50%" style="border-radius:5px; border:1px solid #bbb9b9" />
+					}
+					<div class="col-12 p-3">
+						<label asp-for="ProductBike.ImageUrl"></label>
+						<input type="file" name="file" class="form-control"/>
+					</div>
+					<div class="col-12 p-3">
+						<label asp-for="ProductBike.Description"></label>
+						<textarea type="text" asp-for="ProductBike.Description" class="form-control"></textarea>
+					</div>
+				</div>
+				<div class="row mt-2">
+					<div class="col-6">
+						<button type="submit" class="btn btn-outline-primary form-control shadow-sm rounded">
+							@if(Model.ProductBike.Id == 0)
+							{
+								<text>
+									<i class="bi bi-database-fill-add"></i> Add
+								</text>
+							}
+							else
+							{
+								<text>
+									<i class="bi bi-pencil-square"></i> Update
+								</text>		
+							}
+
+						</button>
+					</div>
+					<div class="col-6">
+						<a asp-controller="Product" asp-action="Index" class="btn btn-outline-secondary form-control shadow-sm rounded">
+							<i class="bi bi-x-circle-fill"></i> Close
+						</a>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+@section Scripts{
+
+	<script>
+		tinymce.init({
+			selector: 'textarea',
+			plugins: ' visualblocks wordcount ',
+			toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+			tinycomments_mode: 'embedded',
+			tinycomments_author: 'Author name',
+			mergetags_list: [
+				{ value: 'First.Name', title: 'First Name' },
+				{ value: 'Email', title: 'Email' },
+			],
+			ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
+		});
+	</script>
+
+	@{
+			<partial name="_ValidationScriptsPartial" />
+	}
+}
+

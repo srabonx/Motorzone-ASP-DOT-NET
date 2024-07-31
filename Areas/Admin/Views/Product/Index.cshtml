@@ -20,39 +20,18 @@
             </a>
         </div>
         <div class="card-body">
-            <table id="product-table" class="table table-hover">
+            <table id="product-table" class="table table-bordered table-striped-columns table-hover">
                 <thead>
                     <tr>
-                        <th class="text-center">Manufacturer</th>
-                        <th class="text-center">Category</th>
                         <th class="text-center">Name</th>
                         <th class="text-center">Version</th>
                         <th class="text-center">Year</th>
                         <th class="text-center">Price</th>
-                        <th></th>
+                        <th class="text-center">Manufacturer</th>
+                        <th class="text-center">Category</th>
                     </tr>
                 </thead>
-                <tbody>
-                    @foreach(var prod in Model.OrderBy(m => m.Manufacturer))
-                    {
-                        <tr>
-                            <td class="text-center">@prod.Manufacturer</td>
-                            <td class="text-center">@prod.Category.Name</td>
-                            <td class="text-center">@prod.Name</td>
-                            <td class="text-center">@prod.Version</td>
-                            <td class="text-center">@prod.Year</td>
-                            <td class="text-center">@prod.Price</td>
-                            <td class="text-center">
-                                <a asp-controller="Product" asp-action="Upsert" asp-route-Id="@prod.Id" class="btn btn-outline-primary">
-                                        <i class="bi bi-pencil-square"></i> Edit
-                                </a>
-                                <a asp-controller="Product" asp-action="Delete" asp-route-Id="@prod.Id" class="btn btn-outline-danger">
-                                        <i class="bi bi-trash-fill"></i> Delete
-                                </a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
+
             </table>
         </div>
     </div>
@@ -60,13 +39,5 @@
 </div>
 
 @section Scripts{
-    @{
-                <partial name="DataTables"/>
-                <script type="text/javascript">
-                    $(document).ready(function () {
-                        $('#product-table').DataTable();
-                    });
-        
-                </script>
-    }
+    <script src="~/js/product.js"> </script>
 }

@@ -135,7 +135,7 @@ namespace MultiWeb.Areas.Admin.Controllers
 			return View();
 		}*/
 
-		public IActionResult Delete(uint? id)
+		/*public IActionResult Delete(uint? id)
 		{
 			if (id == null || id == 0) return NotFound();
 
@@ -155,7 +155,41 @@ namespace MultiWeb.Areas.Admin.Controllers
 
 			TempData["success"] = "Product deleted successfully";
 			return RedirectToAction("Index");
+		}*/
+
+		#region API CALLS
+		[HttpGet]
+		public IActionResult GetAll()
+		{
+            List<ProductBike> productBike = m_unitOfWork.ProductBikeRepo.GetAll(includeProp: "Category").ToList();
+			return Json(new {data = productBike});
+        }
+
+		[HttpDelete]
+		public IActionResult Delete(uint? id)
+		{
+			var objToBeDeleted = m_unitOfWork.ProductBikeRepo.Get(id);
+
+			if (objToBeDeleted == null)
+				return Json(new { success = false, message = "Error deleting data!" });
+	
+			if(!string.IsNullOrEmpty(objToBeDeleted.ImageUrl))
+			{
+                var oldImgPath = Path.Combine(m_webHostEnvironment.WebRootPath, objToBeDeleted.ImageUrl.TrimStart('\\'));
+
+                if (System.IO.File.Exists(oldImgPath))
+                {
+                    System.IO.File.Delete(oldImgPath);
+                }
+            }
+
+			m_unitOfWork.ProductBikeRepo.Remove(objToBeDeleted);
+			m_unitOfWork.SaveChanges();
+
+			return Json(new { success = true, message = "Delete successful" });
 		}
 
-	}
+        #endregion
+
+    }
 }

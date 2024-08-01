@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Multi.Models;
+using Multi.DataAccess.Repository.IUnitOfWorks;
 
 namespace MultiWeb.Areas.Customer.Controllers
 {
@@ -8,15 +9,19 @@ namespace MultiWeb.Areas.Customer.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IUnitOfWork m_unitOfWork;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork)
         {
             _logger = logger;
+            m_unitOfWork = unitOfWork;
         }
 
         public IActionResult Index()
         {
-            return View();
+            var products = m_unitOfWork.ProductBikeRepo.GetAll(includeProp: "Category");
+
+            return View(products);
         }
 
         public IActionResult Privacy()

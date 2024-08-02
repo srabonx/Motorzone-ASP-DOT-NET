@@ -24,6 +24,12 @@ namespace MultiWeb.Areas.Customer.Controllers
             return View(products);
         }
 
+        public IActionResult Details(uint id)
+        {
+            var product = m_unitOfWork.ProductBikeRepo.Get(u => u.Id == id, includeProp: "Category");
+
+            return View(product);
+        }
         public IActionResult Privacy()
         {
             return View();

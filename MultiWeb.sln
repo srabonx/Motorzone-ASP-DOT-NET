@@ -5,11 +5,11 @@ VisualStudioVersion = 17.8.34322.80
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MultiWeb", "MultiWeb.csproj", "{BE98C6CD-BB1F-4B07-BC5C-EF63A51BF36B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Multi.DataAccess", "..\Multi.DataAccess\Multi.DataAccess.csproj", "{DDDECFD9-1EF2-495A-9A58-ACF96A097D13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Multi.DataAccess", "..\Multi.DataAccess\Multi.DataAccess.csproj", "{DDDECFD9-1EF2-495A-9A58-ACF96A097D13}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Multi.Models", "..\Multi.Models\Multi.Models.csproj", "{DBECA794-4621-4B41-A27F-D69177DFABA3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Multi.Models", "..\Multi.Models\Multi.Models.csproj", "{DBECA794-4621-4B41-A27F-D69177DFABA3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Multi.Utiity", "..\Multi.Utiity\Multi.Utiity.csproj", "{671A368A-AD94-4343-AA2D-9EAB9A8B2E4E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Multi.Utiity", "..\Multi.Utiity\Multi.Utiity.csproj", "{671A368A-AD94-4343-AA2D-9EAB9A8B2E4E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

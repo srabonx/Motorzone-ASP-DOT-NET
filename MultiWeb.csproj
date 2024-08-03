@@ -23,7 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Identity\Pages\Account\Manage\" />
     <Folder Include="Controllers\" />
     <Folder Include="wwwroot\images\product\" />
   </ItemGroup>
@@ -32,17 +31,6 @@
     <ProjectReference Include="..\Multi.DataAccess\Multi.DataAccess.csproj" />
     <ProjectReference Include="..\Multi.Models\Multi.Models.csproj" />
     <ProjectReference Include="..\Multi.Utiity\Multi.Utiity.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Update="Areas\Identity\Pages\Account\_StatusMessage.cshtml">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Update="Areas\Identity\Pages\Account\_ViewImports.cshtml">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
   </ItemGroup>
 
 </Project>

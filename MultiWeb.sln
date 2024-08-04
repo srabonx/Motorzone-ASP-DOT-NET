@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Multi.DataAccess", "..\Mult
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Multi.Models", "..\Multi.Models\Multi.Models.csproj", "{DBECA794-4621-4B41-A27F-D69177DFABA3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Multi.Utiity", "..\Multi.Utiity\Multi.Utiity.csproj", "{671A368A-AD94-4343-AA2D-9EAB9A8B2E4E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Multi.Utility", "..\Multi.Utiity\Multi.Utility.csproj", "{671A368A-AD94-4343-AA2D-9EAB9A8B2E4E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

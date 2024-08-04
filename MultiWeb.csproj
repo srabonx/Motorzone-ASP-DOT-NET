@@ -30,7 +30,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Multi.DataAccess\Multi.DataAccess.csproj" />
     <ProjectReference Include="..\Multi.Models\Multi.Models.csproj" />
-    <ProjectReference Include="..\Multi.Utiity\Multi.Utiity.csproj" />
+    <ProjectReference Include="..\Multi.Utiity\Multi.Utility.csproj" />
   </ItemGroup>
 
 </Project>

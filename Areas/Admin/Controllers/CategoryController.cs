@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Multi.DataAccess.Data;
 using Multi.DataAccess.Repository;
 using Multi.DataAccess.Repository.IUnitOfWorks;
 using Multi.Models;
+using Multi.Utility;
 
 namespace MultiWeb.Areas.Admin.Controllers;
 
 [Area("Admin")]
+[Authorize(Roles = StaticData.Identity_Role_Admin)]
 public class CategoryController : Controller
 {
     private readonly IUnitOfWork m_unitOfWork;

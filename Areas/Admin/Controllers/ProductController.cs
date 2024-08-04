@@ -1,13 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Multi.DataAccess.Repository.IUnitOfWorks;
 using Multi.Models;
 using Multi.Models.ViewModels;
+using Multi.Utility;
 
 namespace MultiWeb.Areas.Admin.Controllers
 {
 	[Area("Admin")]
-	public class ProductController : Controller
+    [Authorize(Roles = StaticData.Identity_Role_Admin)]
+    public class ProductController : Controller
 	{
 		private readonly IUnitOfWork m_unitOfWork;
 		private readonly IWebHostEnvironment m_webHostEnvironment;

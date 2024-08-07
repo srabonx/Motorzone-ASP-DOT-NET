@@ -113,6 +113,8 @@ namespace MultiWeb.Areas.Identity.Pages.Account
             [ValidateNever]
             public IEnumerable<SelectListItem> RoleList { get; set; }
 
+            [Required]
+            public string? Name { get; set; }
 
             [Display(Name = "Street Address")]
             public string? StreetAddress { get; set; }
@@ -162,6 +164,15 @@ namespace MultiWeb.Areas.Identity.Pages.Account
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+
+                user.Name = Input.Name;
+                user.StreetAddress = Input.StreetAddress;
+                user.City = Input.City;
+                user.Division = Input.Division;
+                user.PostalCode = Input.PostalCode;
+                user.PhoneNumber = Input.PhoneNumber;
+                
+
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 // Check for roles

@@ -50,7 +50,7 @@ namespace MultiWeb.Areas.Admin.Controllers
 			else
 			{
 				// Update
-				productVM.ProductBike = m_unitOfWork.ProductBikeRepo.Get(id);
+				productVM.ProductBike = m_unitOfWork.ProductBikeRepo.Get(id) ?? new ProductBike();
 
 				return View(productVM);
 			}

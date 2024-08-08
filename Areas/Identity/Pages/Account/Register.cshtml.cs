@@ -107,11 +107,13 @@ namespace MultiWeb.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
 
 
-            // Roles
-            public string? Role { get; set; }
 
             [ValidateNever]
             public IEnumerable<SelectListItem> RoleList { get; set; }
+
+#nullable enable
+            // Roles
+            public string? Role { get; set; }
 
             [Required]
             public string? Name { get; set; }
@@ -126,6 +128,8 @@ namespace MultiWeb.Areas.Identity.Pages.Account
 
             [Display(Name = "Phone Number")]
             public string? PhoneNumber { get; set; }
+
+#nullable disable
 
         }
 

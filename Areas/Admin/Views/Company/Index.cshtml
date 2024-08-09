@@ -1,0 +1,43 @@
+﻿@model List<Company>
+
+@{
+    ViewData["Title"] = "Company";
+}
+
+<partial name="_Notification">
+
+<div class="container">
+
+    <div class="card form-floating shadow">
+        <div class="card-header bg-dark">
+            <div class="col-12 text-center">
+                <h1 class="text-light">Companies</h1>
+            </div>
+        </div>
+        <div class="text-center">
+            <a asp-controller="Company" asp-action="Upsert" class="btn btn-outline-primary shadow-sm w-25 mt-2 rounded">
+                    <i class="bi bi-plus-square"></i> Add New Company
+            </a>
+        </div>
+        <div class="card-body">
+            <table id="company-table" class="table table-bordered table-striped-columns table-hover">
+                <thead>
+                    <tr>
+                        <th class="text-center">Name</th>
+                        <th class="text-center">Phone Number</th>
+                        <th class="text-center">Street</th>
+                        <th class="text-center">City</th>
+                        <th class="text-center">Division</th>
+                        <th class="text-center">Postal Code</th>
+                    </tr>
+                </thead>
+
+            </table>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts{
+    <script src="~/js/company.js"> </script>
+}

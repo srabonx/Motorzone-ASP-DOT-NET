@@ -1,0 +1,83 @@
+﻿@model Company
+
+@{
+	ViewData["Title"] = "Company";
+}
+
+<div class="container">
+	<div class="card form-floating shadow">
+		<div class="card-header bg-dark text-light">
+			<div class="col-12 text-center">
+				<h1>@(Model.Id != 0?"Update":"Create") Company</h1>
+			</div>
+		</div>
+
+		<div class="card-body">
+			<form method="post" enctype="multipart/form-data">
+				<input asp-for="Id" hidden/>
+				<div class="border p-3">
+					<div class="col-12 p-3">
+						<label asp-for="Name"></label>
+						<input asp-for="Name" class="form-control" />
+						<span asp-validation-for="Name" class="text-danger"></span>
+					</div>
+					<div class="col-12 p-3">
+						<label asp-for="StreetAddress"></label>
+						<input asp-for="StreetAddress" class="form-control" />
+					</div>
+					<div class="row p-3">
+						<div class="col-4">
+							<label asp-for="City"></label>
+							<input asp-for="City" class="form-control" />
+						</div>
+						<div class="col-4">
+							<label asp-for="Division"></label>
+							<input asp-for="Division" class="form-control" />
+						</div>
+						<div class="col-4 ">
+							<label asp-for="PostalCode"></label>
+							<input asp-for="PostalCode" class="form-control" />
+						</div>
+					</div>
+					
+					<div class="col-12 p-3">
+						<label asp-for="PhoneNumber"></label>
+						<input asp-for="PhoneNumber" class="form-control" />
+					</div>
+
+				</div>
+				<div class="row mt-2">
+					<div class="col-6">
+						<button type="submit" class="btn btn-outline-primary form-control shadow-sm rounded">
+							@if(Model.Id == 0)
+							{
+								<text>
+									<i class="bi bi-database-fill-add"></i> Add
+								</text>
+							}
+							else
+							{
+								<text>
+									<i class="bi bi-pencil-square"></i> Update
+								</text>		
+							}
+
+						</button>
+					</div>
+					<div class="col-6">
+						<a asp-controller="Product" asp-action="Index" class="btn btn-outline-secondary form-control shadow-sm rounded">
+							<i class="bi bi-x-circle-fill"></i> Close
+						</a>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+@section Scripts{
+	@{
+			<partial name="_ValidationScriptsPartial" />
+	}
+}
+

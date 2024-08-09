@@ -91,13 +91,23 @@ namespace MultiWeb.Areas.Admin.Controllers
 
 				// Add
 				if (productVM.ProductBike.Id == 0)
+				{
 					m_unitOfWork.ProductBikeRepo.Add(productVM.ProductBike);
+
+					m_unitOfWork.SaveChanges();
+
+					TempData["success"] = "Product added successfully";
+				}
 				else // Update
+				{
 					m_unitOfWork.ProductBikeRepo.Update(productVM.ProductBike);
 
-				m_unitOfWork.SaveChanges();
+                    m_unitOfWork.SaveChanges();
 
-				TempData["success"] = "Product added successfully";
+                    TempData["success"] = "Product updated successfully";
+                }
+
+				
 				return RedirectToAction("Index");
 			}
 			else

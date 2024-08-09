@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using Multi.DataAccess.Repository.IUnitOfWorks;
 using Multi.Models;
 using Multi.Utility;
 
@@ -35,6 +36,7 @@ namespace MultiWeb.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<IdentityUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IUnitOfWork _unitOfWork;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
@@ -42,7 +44,8 @@ namespace MultiWeb.Areas.Identity.Pages.Account
             RoleManager<IdentityRole> roleManager,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IUnitOfWork unitOfWork)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -51,6 +54,7 @@ namespace MultiWeb.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _unitOfWork = unitOfWork;
         }
 
         /// <summary>
@@ -111,6 +115,9 @@ namespace MultiWeb.Areas.Identity.Pages.Account
             [ValidateNever]
             public IEnumerable<SelectListItem> RoleList { get; set; }
 
+            [ValidateNever]
+            public IEnumerable<SelectListItem> CompanyList { get; set; }
+
 #nullable enable
             // Roles
             public string? Role { get; set; }
@@ -128,6 +135,8 @@ namespace MultiWeb.Areas.Identity.Pages.Account
 
             [Display(Name = "Phone Number")]
             public string? PhoneNumber { get; set; }
+
+            public uint? CompanyId { get; set; }
 
 #nullable disable
 
@@ -151,7 +160,14 @@ namespace MultiWeb.Areas.Identity.Pages.Account
                 {
                     Text = i,
                     Value = i
+                }),
+
+                CompanyList = _unitOfWork.CompanyRepo.GetAll().Select(i => new SelectListItem
+                {
+                    Text = i.Name,
+                    Value = i.Id.ToString()
                 })
+
             };
 
             ReturnUrl = returnUrl;
@@ -175,6 +191,9 @@ namespace MultiWeb.Areas.Identity.Pages.Account
                 user.Division = Input.Division;
                 user.PostalCode = Input.PostalCode;
                 user.PhoneNumber = Input.PhoneNumber;
+
+                if (Input.Role == StaticData.Identity_Role_Company)
+                    user.CompanyId = Input.CompanyId;
                 
 
                 var result = await _userManager.CreateAsync(user, Input.Password);

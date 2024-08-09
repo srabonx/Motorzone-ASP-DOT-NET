@@ -2,6 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Multi.Models;
 using Multi.DataAccess.Repository.IUnitOfWorks;
+using Microsoft.AspNetCore.Authorization;
+using Multi.Utility;
+using System.Security.Claims;
 
 namespace MultiWeb.Areas.Customer.Controllers
 {
@@ -26,11 +29,35 @@ namespace MultiWeb.Areas.Customer.Controllers
 
         public IActionResult Details(uint id)
         {
-            var product = m_unitOfWork.ProductBikeRepo.Get(u => u.Id == id, includeProp: "Category");
+            var cart = new ShoppingCart()
+            {
+                ProductBike = m_unitOfWork.ProductBikeRepo.Get(u => u.Id == id, includeProp: "Category"),
+                ProductId = id,
+                Count = 1
+            };
 
-            return View(product);
+
+            return View(cart);
         }
-        public IActionResult Privacy()
+
+        [HttpPost]
+        [Authorize]
+		public IActionResult Details(ShoppingCart cart)
+		{
+            var claimsIdentity = (ClaimsIdentity?)User.Identity;
+
+            var userId = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            cart.ApplicationUserId = userId;
+            cart.Id = 0;
+
+            m_unitOfWork.ShoppingCartRepo.Add(cart);
+            m_unitOfWork.SaveChanges();
+
+            return RedirectToAction(nameof(Index));
+		}
+
+		public IActionResult Privacy()
         {
             return View();
         }

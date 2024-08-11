@@ -51,8 +51,27 @@ namespace MultiWeb.Areas.Customer.Controllers
             cart.ApplicationUserId = userId;
             cart.Id = 0;
 
-            m_unitOfWork.ShoppingCartRepo.Add(cart);
-            m_unitOfWork.SaveChanges();
+            var cartFromDb = m_unitOfWork.ShoppingCartRepo.Get(u => u.ApplicationUserId == cart.ApplicationUserId &&
+                                                                u.ProductId == cart.ProductId);
+
+            if(cartFromDb != null)
+            {
+                // Cart already exist, UPDATE
+                cartFromDb.Count += cart.Count;
+                m_unitOfWork.ShoppingCartRepo.Update(cartFromDb);
+
+				TempData["Success"] = "Cart updated successfully!";
+			}
+			else
+            {
+				// Add to DB record
+				m_unitOfWork.ShoppingCartRepo.Add(cart);
+
+				TempData["Success"] = "Product added to cart successfully!";
+			}
+
+
+			m_unitOfWork.SaveChanges();
 
             return RedirectToAction(nameof(Index));
 		}

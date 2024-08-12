@@ -1,85 +1,89 @@
-﻿@model List<ShoppingCart>
+﻿@model ShoppingCartVM
 
 @{
 	ViewData["Title"] = "Cart";
 }
 
-<div class="container">
-	<div class="card shadow">
-		<div class="card-header bg-dark py-4 border-1">
-			<h3 class="text-start px-4 text-light">
-				Shopping Cart
-			</h3>
-		</div>
-		<div class="card-body">
-			<div class="row">
-				<a asp-area ="Customer" asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary mx-lg-4 col-sm-12 col-lg-4">
-					Continue Shopping
-				</a>
+<partial name="_Notification" />
+
+<form method="post">
+	<div class="container">
+		<div class="card shadow">
+			<div class="card-header bg-dark py-4 border-1">
+				<h3 class="text-start px-4 text-light">
+					Shopping Cart
+				</h3>
 			</div>
-			@foreach(var item in Model)
-			{
-				<hr />
-				<div class="row pt-4 border-1">
-					<div class="col-2 align-content-center">
-						<img src="@item.ProductBike.ImageUrl" width="100%" />
-					</div>
-					<div class="col-3 align-content-center">
-						<h5 class="text-uppercase">
-							<strong>@item.ProductBike.Name</strong>
-						</h5>
-						<h6>
-							<small>@Html.Raw(item.ProductBike.Description)</small>
-						</h6>
-					</div>
-					<div class="col-3 align-content-center">
-						
-						<div class="text-start">
+			<div class="card-body">
+				<div class="row">
+					<a asp-area="Customer" asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary mx-lg-4 col-sm-12 col-lg-4">
+						Continue Shopping
+					</a>
+				</div>
+				@foreach (var item in Model.ShoppingCartList)
+				{
+					<hr />
+					<div class="row pt-4 border-1">
+						<div class="col-2 align-content-center">
+							<img src="@item.ProductBike.ImageUrl" width="100%" />
+						</div>
+						<div class="col-3 align-content-center">
+							<h5 class="text-uppercase">
+								<strong>@item.ProductBike.Name</strong>
+							</h5>
 							<h6>
-								@item.ProductBike.Price 
-								<span class="text-muted">&nbsp;x&nbsp;</span>@item.Count = @(item.ProductBike.Price * item.Count)
+								<small>@Html.Raw(item.ProductBike.Description)</small>
 							</h6>
 						</div>
-					</div>
-					<div class="col-2 align-content-center">
-						<div class="btn-group">
-							<button class="btn btn-outline-dark"><i class="bi bi-plus-square"></i></button>
-							&nbsp;
-							<button class="btn btn-outline-dark"><i class="bi bi-dash-square"></i></button>
+						<div class="col-3 align-content-center">
+
+							<div class="text-start">
+								<h6>
+									@item.ProductBike.Price
+									<span class="text-muted">&nbsp;x&nbsp;</span>@item.Count = @(item.ProductBike.Price * item.Count)
+								</h6>
+							</div>
+						</div>
+						<div class="col-2 align-content-center">
+							<div class="btn-group">
+								<a asp-action="Plus" asp-route-cartId="@item.Id" class="btn btn-outline-dark"><i class="bi bi-plus-square"></i></a>
+								&nbsp;
+								<a asp-action="Minus" asp-route-cartId="@item.Id" class="btn btn-outline-dark"><i class="bi bi-dash-square"></i></a>
+							</div>
+						</div>
+						<div class="col-2 align-content-center">
+							<a asp-action="Remove" asp-route-cartId="@item.Id" class="btn btn-danger">
+								<i class="bi bi-trash"></i>
+							</a>
 						</div>
 					</div>
-					<div class="col-2 align-content-center">
-						<button class="btn btn-danger">
-							<i class="bi bi-trash"></i>
-						</button>
-					</div>
-				</div>
-			}		
-			<div class="card-footer">
+				}
+				<div class="card-footer">
 
-				<div class="row">
-					<div class="col-md-4 offset-md-4">
-						<ul class="list-group mb-4">
-							<li class="d-flex justify-content-between align-items-center">
-								<h5 class="text-dark fw-semibold text-uppercase">
-									Total (BDT):
-								</h5>
-								<h4 class="text-dark fw-bolder">
-									000
-								</h4>
-							</li>
-						</ul>
-					</div>					
-				</div>
-				<div class="row py-3">
-					<div class="text-center">
-						<button class="btn btn-primary">
-							Summary
-						</button>
+					<div class="row">
+						<div class="col-md-4 offset-md-4">
+							<ul class="list-group mb-4">
+								<li class="d-flex justify-content-between align-items-center">
+									<h5 class="text-dark fw-semibold text-uppercase">
+										Total (BDT):
+									</h5>
+									<h4 class="text-dark fw-bolder">
+										@Model.TotalPrice
+									</h4>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="row py-3">
+						<div class="text-center">
+							<a asp-action="Summary" class="btn btn-primary">
+								Summary
+							</a>
+						</div>
 					</div>
 				</div>
+
 			</div>
-		
 		</div>
 	</div>
-</div>
+</form>

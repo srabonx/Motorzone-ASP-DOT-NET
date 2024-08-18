@@ -4,6 +4,8 @@ using Multi.DataAccess.Repository.IUnitOfWorks;
 using Multi.Models;
 using Multi.Models.ViewModels;
 using Multi.Utility;
+using Stripe;
+using Stripe.Checkout;
 using System.Security.Claims;
 
 namespace MultiWeb.Areas.Customer.Controllers
@@ -215,6 +217,43 @@ namespace MultiWeb.Areas.Customer.Controllers
 				if (ApplicationUser.CompanyId.GetValueOrDefault() == 0)
 				{
 					// Regular user, we need to capture payment
+					var options = new SessionCreateOptions
+					{
+						SuccessUrl = StaticData.DomainName + $"Customer/Cart/OrderConfirmation?id={ShoppingCartVM.OrderHeader.Id}",
+						CancelUrl = StaticData.DomainName + "Customer/Cart/Index",
+						LineItems = new List<SessionLineItemOptions>(),
+						Mode = "payment",
+					};
+
+					foreach(var item in ShoppingCartVM.ShoppingCartList)
+					{
+						var sessionLineItem = new SessionLineItemOptions
+						{
+							PriceData = new SessionLineItemPriceDataOptions
+							{
+								UnitAmount = item.ProductBike.Price * 100 ?? 0,
+								Currency = "usd",
+								ProductData = new SessionLineItemPriceDataProductDataOptions
+								{
+									Name = item.ProductBike.Name
+								},
+							},
+							
+							Quantity = item.Count,
+						};
+
+						options.LineItems.Add(sessionLineItem);
+					}
+
+					var service = new SessionService();
+					Session session = service.Create(options);
+
+					m_unitOfWork.OrderHeaderRepo.UpdateStripePaymentId(ShoppingCartVM.OrderHeader.Id, session.Id, session.PaymentIntentId);
+					m_unitOfWork.SaveChanges();
+
+					Response.Headers.Add("Location", session.Url);
+					return new StatusCodeResult(303);
+
 				}
 
 				return RedirectToAction(nameof(OrderConfirmation), new { id = ShoppingCartVM.OrderHeader.Id });
@@ -225,6 +264,35 @@ namespace MultiWeb.Areas.Customer.Controllers
 
 		public IActionResult OrderConfirmation(uint id)
 		{
+			OrderHeader? orderHeader = m_unitOfWork.OrderHeaderRepo.Get(u => u.Id == id, includeProp: "ApplicationUser");
+
+			if(orderHeader != null)
+			{
+				if(orderHeader.PaymentStatus != StaticData.PaymentStatusDelayedPayment)
+				{
+					// this is an order by customer
+					var service = new SessionService();
+					Session session = service.Get(orderHeader.SessionId);
+
+					if(session.PaymentStatus.ToLower() == "paid")
+					{
+						// payment went through
+						m_unitOfWork.OrderHeaderRepo.UpdateStripePaymentId(id, session.Id, session.PaymentIntentId);
+						m_unitOfWork.OrderHeaderRepo.UpdateStatus(id, StaticData.StatusApproved, StaticData.PaymentStatusApproved);
+						m_unitOfWork.SaveChanges();
+					}
+				}
+
+				// Remove the shopping cart
+				List<ShoppingCart> shoppingCarts = m_unitOfWork.ShoppingCartRepo.
+					GetAll(u => u.ApplicationUserId == orderHeader.ApplicationUserId).ToList();
+
+				m_unitOfWork.ShoppingCartRepo.RangeRemove(shoppingCarts);
+				m_unitOfWork.SaveChanges(); 
+
+			}
+
+
 			return View(id);
 		}
 

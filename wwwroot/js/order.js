@@ -26,7 +26,7 @@ $(document).ready(function () {
 function loadDataTable(status) {
     dataTable = $('#order-list-table').DataTable(
         {
-            "ajax": { url: '/admin/Order/getall?status=' + status },
+            "ajax": { url: '/Admin/Order/getall?status=' + status },
 
             "columns":
                 [

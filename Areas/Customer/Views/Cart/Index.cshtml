@@ -76,9 +76,12 @@
 					</div>
 					<div class="row py-3">
 						<div class="text-center">
-							<a asp-action="Summary" class="btn btn-primary">
-								Summary
-							</a>
+							@if (Model.ShoppingCartList.Count() > 0)
+							{
+								<a asp-action="Summary" class="btn btn-primary">
+									Summary
+								</a>
+							}
 						</div>
 					</div>
 				</div>

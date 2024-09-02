@@ -24,14 +24,6 @@ namespace MultiWeb.Areas.Customer.Controllers
         {
             var products = m_unitOfWork.ProductBikeRepo.GetAll(includeProp: "Category");
 
-            var claimsIdentity = (ClaimsIdentity?)User.Identity;
-
-            var userId = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            if (!string.IsNullOrEmpty(userId))
-                HttpContext.Session.SetInt32(StaticData.SessionCart,
-                    m_unitOfWork.ShoppingCartRepo.GetAll(u => u.ApplicationUserId == userId).Count());
-
             return View(products);
         }
 

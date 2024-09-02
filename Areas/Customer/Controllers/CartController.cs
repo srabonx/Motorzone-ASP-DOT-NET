@@ -84,7 +84,10 @@ namespace MultiWeb.Areas.Customer.Controllers
 
 			if (item.Count <= 0)
 			{
-				m_unitOfWork.ShoppingCartRepo.Remove(item);
+                HttpContext.Session.SetInt32(StaticData.SessionCart,
+                m_unitOfWork.ShoppingCartRepo.GetAll(u => u.ApplicationUserId == item.ApplicationUserId).Count() - 1);
+
+                m_unitOfWork.ShoppingCartRepo.Remove(item);
 			}
 			else
 			{
@@ -109,6 +112,9 @@ namespace MultiWeb.Areas.Customer.Controllers
 				TempData["Failure"] = "Failed to update cart information!";
 				return RedirectToAction(nameof(Index));
 			}
+
+			HttpContext.Session.SetInt32(StaticData.SessionCart,
+				m_unitOfWork.ShoppingCartRepo.GetAll(u => u.ApplicationUserId == item.ApplicationUserId).Count() - 1);
 
 			m_unitOfWork.ShoppingCartRepo.Remove(item);
 			m_unitOfWork.SaveChanges();

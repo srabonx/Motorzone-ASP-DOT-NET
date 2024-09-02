@@ -14,6 +14,9 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using Multi.Utility;
+using Multi.DataAccess.Repository.IUnitOfWorks;
+using System.Security.Claims;
 
 namespace MultiWeb.Areas.Identity.Pages.Account
 {
@@ -21,11 +24,15 @@ namespace MultiWeb.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly IUnitOfWork m_unitOfWork;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger, IUnitOfWork unitOfWork)
         {
             _signInManager = signInManager;
             _logger = logger;
+
+            // Unit Of Work
+            m_unitOfWork = unitOfWork;
         }
 
         /// <summary>
@@ -115,6 +122,15 @@ namespace MultiWeb.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
+
+                    // Loading the session data
+                    var claimsIdentity = (ClaimsIdentity)User.Identity;
+
+                    var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+                    HttpContext.Session.SetInt32(StaticData.SessionCart, 
+                        m_unitOfWork.ShoppingCartRepo.GetAll(u=>u.ApplicationUserId == userId).Count());
+
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)

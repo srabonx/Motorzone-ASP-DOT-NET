@@ -24,6 +24,14 @@ namespace MultiWeb.Areas.Customer.Controllers
         {
             var products = m_unitOfWork.ProductBikeRepo.GetAll(includeProp: "Category");
 
+            var claimsIdentity = (ClaimsIdentity?)User.Identity;
+
+            var userId = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (!string.IsNullOrEmpty(userId))
+                HttpContext.Session.SetInt32(StaticData.SessionCart,
+                    m_unitOfWork.ShoppingCartRepo.GetAll(u => u.ApplicationUserId == userId).Count());
+
             return View(products);
         }
 
@@ -51,7 +59,7 @@ namespace MultiWeb.Areas.Customer.Controllers
             cart.ApplicationUserId = userId;
             cart.Id = 0;
 
-            var cartFromDb = m_unitOfWork.ShoppingCartRepo.Get(u => u.ApplicationUserId == cart.ApplicationUserId &&
+            var cartFromDb = m_unitOfWork.ShoppingCartRepo.Get(u => u.ApplicationUserId == userId &&
                                                                 u.ProductId == cart.ProductId);
 
             if(cartFromDb != null)
@@ -60,18 +68,24 @@ namespace MultiWeb.Areas.Customer.Controllers
                 cartFromDb.Count += cart.Count;
                 m_unitOfWork.ShoppingCartRepo.Update(cartFromDb);
 
-				TempData["Success"] = "Cart updated successfully!";
+                m_unitOfWork.SaveChanges();
+
+                TempData["Success"] = "Cart updated successfully!";
 			}
 			else
             {
 				// Add to DB record
 				m_unitOfWork.ShoppingCartRepo.Add(cart);
 
+                m_unitOfWork.SaveChanges();
+
+                HttpContext.Session.SetInt32(StaticData.SessionCart,
+                    (int?)m_unitOfWork.ShoppingCartRepo.GetAll(u => u.ApplicationUserId == userId)?.Count() ?? 0);
+
 				TempData["Success"] = "Product added to cart successfully!";
 			}
 
-
-			m_unitOfWork.SaveChanges();
+			
 
             return RedirectToAction(nameof(Index));
 		}

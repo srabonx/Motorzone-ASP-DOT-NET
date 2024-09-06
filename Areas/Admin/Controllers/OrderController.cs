@@ -162,10 +162,12 @@ namespace MultiWeb.Areas.Admin.Controllers
             OrderVM.OrderDetails = m_unitOfWork.OrderDetailRepo.GetAll(x => x.OrderHeader.Id == OrderVM.OrderHeader.Id,
                 includeProp: "ProductBike");
 
+            var domain = Request.Scheme + "://" + Request.Host.Value + "/";
+
 			var options = new SessionCreateOptions
 			{
-				SuccessUrl = StaticData.DomainName + $"Admin/order/PaymentConfirmation?orderHeaderId={OrderVM.OrderHeader.Id}",
-				CancelUrl = StaticData.DomainName + $"Admin/order/details?orderId={OrderVM.OrderHeader.Id}",
+				SuccessUrl = domain + $"Admin/order/PaymentConfirmation?orderHeaderId={OrderVM.OrderHeader.Id}",
+				CancelUrl = domain + $"Admin/order/details?orderId={OrderVM.OrderHeader.Id}",
 				LineItems = new List<SessionLineItemOptions>(),
 				Mode = "payment",
 			};

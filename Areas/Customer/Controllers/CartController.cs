@@ -222,11 +222,13 @@ namespace MultiWeb.Areas.Customer.Controllers
 
 				if (ApplicationUser.CompanyId.GetValueOrDefault() == 0)
 				{
-					// Regular user, we need to capture payment
-					var options = new SessionCreateOptions
+                    // Regular user, we need to capture payment
+                    var domain = Request.Scheme + "://" + Request.Host.Value + "/";
+
+                    var options = new SessionCreateOptions
 					{
-						SuccessUrl = StaticData.DomainName + $"Customer/Cart/OrderConfirmation?id={ShoppingCartVM.OrderHeader.Id}",
-						CancelUrl = StaticData.DomainName + "Customer/Cart/Index",
+						SuccessUrl = domain + $"Customer/Cart/OrderConfirmation?id={ShoppingCartVM.OrderHeader.Id}",
+						CancelUrl = domain + "Customer/Cart/Index",
 						LineItems = new List<SessionLineItemOptions>(),
 						Mode = "payment",
 					};

@@ -294,8 +294,9 @@ namespace MultiWeb.Areas.Customer.Controllers
 					GetAll(u => u.ApplicationUserId == orderHeader.ApplicationUserId).ToList();
 
 				m_unitOfWork.ShoppingCartRepo.RangeRemove(shoppingCarts);
-				m_unitOfWork.SaveChanges(); 
+				m_unitOfWork.SaveChanges();
 
+				HttpContext.Session.Clear();
 			}
 
 

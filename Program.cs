@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Multi.Utility;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Stripe;
+using Multi.DataAccess.DBInitializer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddIdentity<IdentityUser,IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+
+// Configure facebook login
+builder.Services.AddAuthentication().AddFacebook(options =>
+{
+    options.AppId = "1964625640645653";
+    options.AppSecret = "f093c1f922581305c9584d59551af759";
+});
 
 // Configure Application Cookie
 builder.Services.ConfigureApplicationCookie(options =>
@@ -50,6 +58,9 @@ builder.Services.AddRazorPages();
 // Adding Unit of Work to the container
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+// Add db initializer
+builder.Services.AddScoped<IDBInitializer, DBInitializer>();
+
 
 var app = builder.Build();
 
@@ -72,9 +83,20 @@ StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey"
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
+SeedDatabase();
 app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
     pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
+
+void SeedDatabase()
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var dbInitializer = scope.ServiceProvider.GetRequiredService<IDBInitializer>();
+        dbInitializer.Initialize();
+    }
+}

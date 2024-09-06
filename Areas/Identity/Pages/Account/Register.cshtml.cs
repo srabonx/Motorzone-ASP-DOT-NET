@@ -145,14 +145,6 @@ namespace MultiWeb.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
-            // If no role exists in the database
-            if(!_roleManager.RoleExistsAsync(StaticData.Identity_Role_Admin).GetAwaiter().GetResult())
-            {
-                _roleManager.CreateAsync(new IdentityRole(StaticData.Identity_Role_Admin)).GetAwaiter().GetResult();
-                _roleManager.CreateAsync(new IdentityRole(StaticData.Identity_Role_Employee)).GetAwaiter().GetResult();
-                _roleManager.CreateAsync(new IdentityRole(StaticData.Identity_Role_Company)).GetAwaiter().GetResult();
-                _roleManager.CreateAsync(new IdentityRole(StaticData.Identity_Role_Customer)).GetAwaiter().GetResult();
-            }
 
             Input = new()
             {
@@ -230,8 +222,16 @@ namespace MultiWeb.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
+                        if(User.IsInRole(StaticData.Identity_Role_Admin))
+                        {
+                            TempData["Success"] = "New user created successfully.";
+                        }
+                        else
+                        {
+                            await _signInManager.SignInAsync(user, isPersistent: false);
+                            return LocalRedirect(returnUrl);
+                        }
+                       
                     }
                 }
                 foreach (var error in result.Errors)

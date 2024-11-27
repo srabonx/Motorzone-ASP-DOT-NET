@@ -23,8 +23,8 @@ builder.Services.AddIdentity<IdentityUser,IdentityRole>().AddEntityFrameworkStor
 // Configure facebook login
 builder.Services.AddAuthentication().AddFacebook(options =>
 {
-    options.AppId = "1964625640645653";
-    options.AppSecret = "f093c1f922581305c9584d59551af759";
+    options.AppId = "***************************";
+    options.AppSecret = "*********************88";
 });
 
 // Configure Application Cookie
